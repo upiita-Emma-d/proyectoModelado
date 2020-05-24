@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 from scipy.integrate import odeint
 import time
-from ecuaciones import  pendulo_datos, resorte , atwood
+from ecuaciones import  pendulo_datos, resorte , atwood,pen_doble
 
 altura_de_pantalla=600
 ancho_de_pantalla=600
@@ -40,8 +40,8 @@ def show(x,y,velocidad,Magnitud):
 def bola(x,y,b):
     cy=altura_de_pantalla/2
     cx=ancho_de_pantalla/2
-    bolaX=x + cy
-    bolaY=y + cx
+    bolaX=int(x + cy)
+    bolaY=int(y + cx)
     if b==0:
         pantalla.blit(bolaImg,(bolaX,bolaY))
     if b==1:
@@ -51,7 +51,15 @@ def linea(x,y):
     cx = (ancho_de_pantalla/2)
     lineaX=x+cy
     lineaY=y+cx
-    pygame.draw.line(pantalla, AZUL, [cy, cx], [lineaX, lineaY], 3)
+    pygame.draw.line(pantalla, AZUL, [cy, cx], [lineaX, lineaY], 4)
+def linea_dos_p(xi,yi,xf,yf):
+    cy = (altura_de_pantalla/2)
+    cx = (ancho_de_pantalla/2)
+    xi=xi+cy
+    yi=yi+cx
+    xf=xf+cy
+    yf=yf+cx
+    pygame.draw.line(pantalla, AZUL, [xi,yi], [xf, yf], 4)  
 def bolaa(x,y,b):
     cx=50
     cy=ancho_de_pantalla/2
@@ -67,7 +75,7 @@ def lineaa(x,y):
     cy = (ancho_de_pantalla/2)
     lineaX=x+cy
     lineaY=y+cx
-    pygame.draw.line(pantalla, MORA, [cy, cx], [lineaX, lineaY], 3)
+    pygame.draw.line(pantalla, MORA, [cy, cx], [lineaX, lineaY], 4)
 
 def animaciones(opcion):
     print(opcion)
@@ -78,6 +86,9 @@ def animaciones(opcion):
         anguloGra,velocidad,Xm,Ym,t = resorte.resorte()
     elif opcion==2:
         anguloGra,velocidad,Xm,Ym,t,atw= atwood.atwood()
+        ele=4*100
+    elif opcion==3:
+        anguloGra,velocidad,Xm,Ym,X2,Y2,t = pen_doble.pd()
         ele=4*100
 
     
@@ -95,6 +106,7 @@ def animaciones(opcion):
             show(10,10,anguloGra[i],'Angulo')
             show(10,110,velocidad[i],'Velocidad')
             show(10,210,np.around(t[i],decimals=1),'tiempo')
+
         elif opcion==1:
             pantalla.fill((BLANCO))
             show(10,10,anguloGra[i],'Posicion X')
@@ -122,12 +134,26 @@ def animaciones(opcion):
             show(10,210,np.around(t[i],decimals=1),'tiempo')
             if Ym[i]<=0:
                 i=0
+
+        elif opcion==3:
+            
+            pantalla.fill((RF))
+            bola(Xm[i]-5,Ym[i],0)
+            linea(Xm[i],Ym[i])
+            bola(X2[i],Y2[i],1)
+            linea_dos_p(Xm[i],Ym[i],X2[i],Y2[i])
+            #linea(Xm[i],Ym[i])
+            show(10,10,anguloGra[i],'Angulo UNO')
+            show(10,110,velocidad[i],'Velocidad UNO')
+            show(230,500,np.around(t[i],decimals=1),'tiempo')
+            show(350,10,anguloGra[i],'Angulo DOS')
+            show(350,110,velocidad[i],'Velocidad DOS')
+            
         pygame.display.update()
         if i==(len(Xm)-1):
             i=0
         i=i+1
         #print(i)
-        pygame.time.wait(25)
+        pygame.time.wait(45)
         #timer_resolution = pygame.TIMER_RESOLUTION
         #print (timer_resolution+25)
-

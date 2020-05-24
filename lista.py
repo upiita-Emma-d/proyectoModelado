@@ -17,6 +17,8 @@ green=0, 239, 0
 block_color = (53,115,255)
 bright_red=(255,0,0)
 bright_green=0,255,0
+DORADO_B=(255, 215, 0)
+DORADO=(218, 165, 32)
 pantalla = pygame.display.set_mode((ancho_de_pantalla,altura_de_pantalla))
 #pygame.display.set_caption('A bit Racey')
 clock = pygame.time.Clock()
@@ -36,6 +38,11 @@ def atwood():
     op=2
     animaciones.animaciones(op)
     return intro
+def doble():
+    op=3
+    animaciones.animaciones(op)
+    return intro
+
 
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
@@ -49,13 +56,13 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     else:
         pygame.draw.rect(pantalla, ic,(x,y,w,h))
 
-    smallText = pygame.font.Font('font\Mate-Italic.ttf',30)
+    smallText = pygame.font.Font('font\Mate-Italic.ttf',23)
     textSurf, textRect = text_objects(msg, smallText,black)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     pantalla.blit(textSurf, textRect)
 
 def text_objects(text, font,col):
-    textSurface = font.render(text, True,white)
+    textSurface = font.render(text, True,col)
     return textSurface, textSurface.get_rect()
  
 def message_display(text):
@@ -85,9 +92,10 @@ def lista_fun():
         TextSurf, TextRect = text_objects("Modelado y Simulacion ", largeText, white )
         TextRect.center = ((ancho_de_pantalla/2),(50))
         pantalla.blit(TextSurf, TextRect)
-        button('Pendulo',50,100,180,50,green,bright_green,pendulo)
-        button('Masa Resorte',50,250,180,50,green,bright_green,resorte)
-        button('Maquina de Atwood ',50,400,180,50,green,bright_green,atwood)
-        button("Quit",400,500,100,50,red,bright_red, quitgame)
+        button('Pendulo',50,90,180,50,DORADO,DORADO_B,pendulo)
+        button('Masa Resorte',50,240,180,50,DORADO,DORADO_B,resorte)
+        button('Maquina de Atwood ',50,390,180,50,DORADO,DORADO_B,atwood)
+        button('Doble Pendulo ',50,540,180,50,DORADO,DORADO_B,doble)
+        button("Quit",540,540,50,50,red,bright_red, quitgame)
         pygame.display.update()
         clock.tick(15)
