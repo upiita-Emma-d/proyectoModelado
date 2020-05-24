@@ -42,6 +42,10 @@ def doble():
     op=3
     animaciones.animaciones(op)
     return intro
+def carro():
+    op=4
+    animaciones.animaciones(op)
+    return intro
 
 
 def button(msg,x,y,w,h,ic,ac,action=None):
@@ -96,6 +100,7 @@ def lista_fun():
         button('Masa Resorte',50,240,180,50,DORADO,DORADO_B,resorte)
         button('Maquina de Atwood ',50,390,180,50,DORADO,DORADO_B,atwood)
         button('Doble Pendulo ',50,540,180,50,DORADO,DORADO_B,doble)
+        button('Carro',250,90,180,50,DORADO,DORADO_B,carro)
         button("Quit",540,540,50,50,red,bright_red, quitgame)
         pygame.display.update()
         clock.tick(15)

@@ -2,16 +2,20 @@ import pygame
 import numpy as np
 from scipy.integrate import odeint
 import time
-from ecuaciones import  pendulo_datos, resorte , atwood,pen_doble,pendulo_doble
+from ecuaciones import  pendulo_datos, resorte , atwood,pen_doble,pendulo_doble,pendulo_inv_carp
 
 altura_de_pantalla=600
 ancho_de_pantalla=600
+
 #colores
 RF=131, 33, 97
 MORA=61, 38, 69
 SR=218, 65, 103
 BLANCO=240, 254, 254
 AZUL=18,10,143
+BLACK=0,0,0
+#fondo Resbaloso
+fondoM=pygame.image.load('img/fondoResbaloso.png')
 #intialize the pygame
 pygame.init()
 #creat the pantalla 
@@ -24,11 +28,13 @@ pygame.display.set_icon(icon)
 bolaImg=pygame.image.load('img/sport _1.png')
 bolaImg2=pygame.image.load('img/soccer-ball.png')
 #polea
+
 polea=pygame.image.load('img/polea.png')
 #Disco M R
 disco=pygame.image.load('img/disco_150.jpg')
 riel=pygame.image.load('img/riel.png')
 res=pygame.image.load('img/r.jpg')
+rayo=pygame.image.load('img/rayom.png')
 #pantalla
 font =pygame.font.Font('font/Mate-Italic.ttf',32)
 #awwood
@@ -59,7 +65,17 @@ def linea_dos_p(xi,yi,xf,yf):
     yi=yi+cx
     xf=xf+cy
     yf=yf+cx
-    pygame.draw.line(pantalla, AZUL, [xi,yi], [xf, yf], 4)  
+    pygame.draw.line(pantalla, BLACK, [xi,yi], [xf, yf], 4)  
+
+def linea_dos_pf(xi,yi,xf,yf):
+    cy = (altura_de_pantalla/2)
+    cx = (ancho_de_pantalla/2)
+    xi=xi+cy
+    yi=yi+cx
+    xf=xf+cy
+    yf=yf+cx
+    pygame.draw.line(pantalla, BLACK, [xi,yi], [xf, yf], 4)  
+
 def bolaa(x,y,b):
     cx=50
     cy=ancho_de_pantalla/2
@@ -90,7 +106,9 @@ def animaciones(opcion):
     elif opcion==3:
         anguloGra,velocidad,Xm,Ym,X2,Y2,t =pendulo_doble.penduloDoble() #pen_doble.pd()
         ele=4*100
-
+    elif opcion==4:
+        x,v,tetha,w,Pmx,Pmy,PMx,PMy,t =pendulo_inv_carp.pendulocarp()     #pen_doble.pd()
+        Xm=x
     
     i=0
     running =True
@@ -148,12 +166,36 @@ def animaciones(opcion):
             show(230,500,np.around(t[i],decimals=1),'tiempo')
             show(350,10,anguloGra[i],'Angulo DOS')
             show(350,110,velocidad[i],'Velocidad DOS')
+        
+        elif opcion==4:
+            #x,v,tetha,w,Pmx,Pmy,PMx,PMy,t
+            pantalla.fill((255,255,255))
+            pantalla.blit(fondoM,[0,0])
+            pantalla.blit(rayo, [ -PMx[i] +(ancho_de_pantalla/2) -170, -PMy[i] + (altura_de_pantalla/2)-50])
+            #pantalla.blit(polea,[-PMx[i] +(ancho_de_pantalla/2) , -PMy[i] + (altura_de_pantalla/2)+25])
+            #pantalla.blit(fondoM,[0,0])
+            bola(-Pmx[i],-Pmy[i],0)
+            linea_dos_p(-Pmx[i],-Pmy[i], -PMx[i] ,-PMy[i] )
+            #linea(Xm[i],Ym[i])
+            #bola(PMx[i],PMy[i],1)
             
+            #pantalla.blit(rayo, [ -PMx[i] +(ancho_de_pantalla/2) , -PMy[i] + (altura_de_pantalla/2)-50])
+            
+            #linea_dos_p(Xm[i],Ym[i],X2[i],Y2[i])
+            show(10,400,np.around(Pmx[i],decimals=1),'Bola en X')
+            show(10,450,np.around(Pmy[i],decimals=1),'Bola en Y')
+            show(10,500,np.around(PMy[i],decimals=1),'Auto en X')
+            show(530,530,np.around(t[i],decimals=1),'t')
+            show(10,550,np.around(v[i],decimals=1),'Velocidad auto')
+            #show(350,110,velocidad[i],'Velocidad DOS')
+            
+
+
         pygame.display.update()
         if i==(len(Xm)-1):
             i=0
         i=i+1
         #print(i)
-        pygame.time.wait(45)
+        pygame.time.wait(100)
         #timer_resolution = pygame.TIMER_RESOLUTION
         #print (timer_resolution+25)
