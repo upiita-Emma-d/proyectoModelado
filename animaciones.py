@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 from scipy.integrate import odeint
 import time
-from ecuaciones import  pendulo_datos, resorte , atwood,pen_doble
+from ecuaciones import  pendulo_datos, resorte , atwood,pen_doble,pendulo_doble
 
 altura_de_pantalla=600
 ancho_de_pantalla=600
@@ -88,7 +88,7 @@ def animaciones(opcion):
         anguloGra,velocidad,Xm,Ym,t,atw= atwood.atwood()
         ele=4*100
     elif opcion==3:
-        anguloGra,velocidad,Xm,Ym,X2,Y2,t = pen_doble.pd()
+        anguloGra,velocidad,Xm,Ym,X2,Y2,t =pendulo_doble.penduloDoble() #pen_doble.pd()
         ele=4*100
 
     
